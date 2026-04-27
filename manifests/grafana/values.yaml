@@ -1,0 +1,23 @@
+# Grafana Helm values placeholder
+persistence:
+  enabled: true
+  storageClass: "local-path"
+  size: 2Gi
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 3000
+
+# Loki-г автоматаар холбох
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Loki
+      type: loki
+      url: http://loki.CHANGE_MY_NAME_SPACE.svc.cluster.local:3100
+      access: proxy
+      isDefault: true
+      jsonData:
+        maxLines: 1000

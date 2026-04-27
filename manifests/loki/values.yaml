@@ -1,0 +1,21 @@
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+  
+  # Диск дээр хадгалах тохиргоо
+  persistence:
+    enabled: true
+    storageClass: "local-path"
+    size: 10Gi
+
+  # Retention Policy: 7 хоногоос хуучин логийг устгах
+  limits_config:
+    retention_period: 168h
+
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1

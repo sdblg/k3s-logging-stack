@@ -1,0 +1,17 @@
+# Alloy Helm values placeholder
+alloy:
+  configMap:
+    create: false
+    name: custom-alloy-config
+    key: config.alloy
+
+controller:
+  type: daemonset
+
+rbac:
+  create: true
+
+# Дискнээс лог унших эрх өгөх
+alloyConfig:
+  mounts:
+    varlog: true
