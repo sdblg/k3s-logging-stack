@@ -1,17 +1,28 @@
-# Alloy Helm values placeholder
 alloy:
-  configMap:
-    create: false
-    name: custom-alloy-config
-    key: config.alloy
+  # 1. Тохиргоог 'config' дотор бичнэ
+  config: |
+    discovery.kubernetes "pods" {
+      role = "pod"
+    }
 
-controller:
-  type: daemonset
+    loki.source.kubernetes "pod_logs" {
+      targets    = discovery.kubernetes.pods.targets
+      forward_to = [loki.write.local.receiver]
+    }
 
+    loki.write "local" {
+      endpoint {
+        url = "http://loki.CHANGE_MY_NAME_SPACE.svc.cluster.local:3100/loki/api/v1/push"
+      }
+    }
+  
+  # 2. Ubuntu-ийн /var/log/pods фолдерыг Alloy-д холбох (Маш чухал!)
+  mounts:
+    varlog: true
+
+# 3. RBAC болон DaemonSet тохиргоог Alloy-ийн гадна бичнэ
 rbac:
   create: true
 
-# Дискнээс лог унших эрх өгөх
-alloyConfig:
-  mounts:
-    varlog: true
+controller:
+  type: daemonset
